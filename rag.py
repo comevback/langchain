@@ -6,8 +6,9 @@ from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 from dotenv import load_dotenv
 import os
 
-# === 1️⃣ 加载环境变量 (.env 文件) ===
+# === 1️⃣ 加载环境变量 (.env 文件) 和索引文件 ===
 load_dotenv()
+index_file = "faiss_index"
 
 # === 2️⃣ 从 .env 读取配置 ===
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
@@ -31,7 +32,13 @@ embeddings = AzureOpenAIEmbeddings(
     azure_endpoint=AZURE_OPENAI_ENDPOINT,
     api_key=AZURE_OPENAI_API_KEY
 )
-vectorstore = FAISS.from_documents(chunks, embeddings)
+
+if os.path.exists(index_file):
+    vectorstore = FAISS.load_local(
+        index_file, embeddings, allow_dangerous_deserialization=True)
+else:
+    vectorstore = FAISS.from_documents(chunks, embeddings)
+    vectorstore.save_local(index_file)
 
 # === 6️⃣ 构建问答链（Azure Chat 模型）===
 llm = AzureChatOpenAI(
