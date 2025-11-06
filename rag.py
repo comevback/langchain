@@ -40,9 +40,17 @@ llm = AzureChatOpenAI(
     azure_endpoint=AZURE_OPENAI_ENDPOINT,
     api_key=AZURE_OPENAI_API_KEY
 )
-qa = RetrievalQA.from_chain_type(llm=llm, retriever=vectorstore.as_retriever())
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=vectorstore.as_retriever(),
+    return_source_documents=True
+)
 
 # === 7️⃣ 提问 ===
-query = "根据文档，美绪是谁，有什么特色，学习到了什么？"
+query = "根据文档，美绪是谁，有什么特色，学习到了什么？他们两个具体学习了什么？"
 print("Q:", query)
-print("A:", qa.invoke(query))
+result = qa.invoke(query)
+print("A:", result['result'])
+print("检索片段：")
+for i, doc in enumerate(result['source_documents']):
+    print(f"\n片段{i+1}:", doc.page_content)
