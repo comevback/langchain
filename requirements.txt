@@ -4,3 +4,4 @@ langchain-openai
 dotenv
 faiss-cpu
 openai
+pypdf
