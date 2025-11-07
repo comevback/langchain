@@ -1,7 +1,3 @@
-# the faiss index files
-faiss_index/
-faiss_index_local/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
