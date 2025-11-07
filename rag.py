@@ -94,7 +94,7 @@ qa = RetrievalQA.from_chain_type(
 )
 
 # === 🔟 提问 ===
-query = "请用中文总结一下《Python核心编程》这本书讲的主要内容。"
+query = "《Python核心编程》中第8章扩展Python具体讲了什么，我会学到什么，学会之后我能用这个发挥什么作用。"
 print("\nQ:", query)
 result = qa.invoke(query)
 print("\nA:", result['result'])
